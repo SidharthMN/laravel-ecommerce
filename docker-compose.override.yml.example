@@ -1,0 +1,38 @@
+# docker-compose.override.yml
+# This file is used for LOCAL DEVELOPMENT ONLY
+# It overrides docker-compose.yml for better DX
+
+version: '3.8'
+
+services:
+  app:
+    environment:
+      - APP_DEBUG=true
+      - APP_ENV=local
+      - XDEBUG_ENABLED=1
+      - XDEBUG_MODE=develop,debug,coverage
+      - XDEBUG_CONFIG=client_host=host.docker.internal
+    volumes:
+      - ./:/app
+      - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
+
+  nginx:
+    ports:
+      - "80:80"
+
+  mysql:
+    ports:
+      - "3306:3306"
+
+  phpmyadmin:
+    ports:
+      - "8080:80"
+
+  redis:
+    ports:
+      - "6379:6379"
+
+  mailhog:
+    ports:
+      - "1025:1025"
+      - "8025:8025"
