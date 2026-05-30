@@ -63,4 +63,6 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Default command: run PHP-FPM
-CMD ["php-fpm"]
+##CMD ["php-fpm"]
+
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
