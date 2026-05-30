@@ -66,3 +66,9 @@ ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 ##CMD ["php-fpm"]
 
 CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
+
+RUN mkdir -p storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    bootstrap/cache
+RUN chmod -R 775 storage bootstrap/cache
