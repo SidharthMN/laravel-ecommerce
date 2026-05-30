@@ -47,7 +47,7 @@ RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 
 # Copy .env.example to .env if .env doesn't exist (Make it uncommented for docker pull)
-#RUN if [ ! -f .env ]; then cp .env.example .env; fi
+RUN if [ ! -f .env ]; then cp .env.example .env; fi
 
 # Set permissions
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
@@ -63,14 +63,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
 
 # Default command: run PHP-FPM
-##CMD ["php-fpm"]
+CMD ["php-fpm"]
 
-RUN mkdir -p storage/framework/cache \
-    storage/framework/sessions \
-    storage/framework/views \
-    bootstrap/cache
-RUN chmod -R 775 storage bootstrap/cache
 
-CMD php artisan serve --host=0.0.0.0 --port=${PORT:-10000}
 
 

@@ -10,10 +10,10 @@ if [ ! -d "vendor" ] || [ ! -f "vendor/autoload.php" ]; then
 fi
 
 # Ensure .env exists
-#if [ ! -f .env ]; then
-  #echo "[entrypoint] .env not found, copying from .env.example"
-  #cp .env.example .env
-#fi
+if [ ! -f .env ]; then
+  echo "[entrypoint] .env not found, copying from .env.example"
+  cp .env.example .env
+fi
 
 echo "[entrypoint] Running storage:link (if needed)"
 php artisan storage:link || true
