@@ -46,8 +46,8 @@ RUN chmod -R 775 bootstrap/cache
 RUN composer install --no-interaction --no-dev --optimize-autoloader
 
 
-# Copy .env.example to .env if .env doesn't exist
-RUN if [ ! -f .env ]; then cp .env.example .env; fi
+# Copy .env.example to .env if .env doesn't exist (Make it uncommented for docker pull)
+#RUN if [ ! -f .env ]; then cp .env.example .env; fi
 
 # Set permissions
 RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
