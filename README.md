@@ -39,29 +39,10 @@ ecommerce/
 │── package.json
 ```
 
-❌ DO NOT upload:
-
-```text
-vendor/
-node_modules/
-.env
-```
 
 ---
 
-## 🚀 2. PUSH TO GITHUB
-
-Inside your project:
-
-```bash
-git add .
-git commit -m "Docker Laravel ecommerce setup"
-git push origin main
-```
-
----
-
-## 🚀 3. WHAT OTHER PERSON DOES (CLONE + RUN)
+## 🚀 2. WHAT OTHER PERSON DOES (CLONE + RUN)
 
 ### Step 1: Clone project
 
@@ -123,7 +104,7 @@ docker compose exec app php artisan migrate
 
 ---
 
-## 🌐 4. OPEN PROJECT
+## 🌐 3. OPEN PROJECT
 
 ### Laravel App
 
@@ -292,32 +273,3 @@ Happy building! ✅
 
 ---
 
-## Deploying to Render (Free plan)
-
-Render's free tier does not provide SSH or pre-deploy hooks, so the container must perform any first-time setup at runtime. This repository includes a runtime entrypoint script `docker-entrypoint.sh` that:
-
-- installs Composer dependencies if missing
-- ensures `.env` exists (copies from `.env.example`)
-- creates the storage symlink
-- clears caches
-- runs database migrations with a retry loop (waits for DB to become ready)
-
-What to set in Render (Environment):
-
-APP_ENV=production
-APP_DEBUG=false
-APP_KEY=base64:YOUR_GENERATED_KEY
-DB_CONNECTION=mysql
-DB_HOST=<your-db-host>
-DB_PORT=3306
-DB_DATABASE=<your-db-name>
-DB_USERNAME=<your-db-user>
-DB_PASSWORD=<your-db-pass>
-
-Notes:
-
-- The Dockerfile now copies `docker-entrypoint.sh` and sets it as the container `ENTRYPOINT`. The default `CMD` remains `php-fpm` so the entrypoint finishes setup and then starts the server.
-- Migrations are run automatically at container start with retries to handle database cold starts.
-- Because the entrypoint runs `composer install` when `vendor` is missing, no manual pre-deploy commands are required on Render.
-
-If you prefer a different strategy (eg. run migrations from CI or use an external DB migration tool), remove or modify the `docker-entrypoint.sh` accordingly.
