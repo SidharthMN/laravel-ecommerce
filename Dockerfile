@@ -55,5 +55,12 @@ RUN chown -R www-data:www-data /app/storage /app/bootstrap/cache
 # Expose port (FPM uses 9000 internally)
 EXPOSE 9000
 
-# Run PHP-FPM
+# Copy entrypoint and set permissions
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# Use the entrypoint to perform runtime setup (migrations, storage link, etc.)
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+# Default command: run PHP-FPM
 CMD ["php-fpm"]

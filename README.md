@@ -289,3 +289,35 @@ This ecommerce app is built on Laravel and includes:
 This project is a complete Laravel ecommerce foundation with user shopping flows, an admin control panel, session cart handling, product and order management, review moderation, and wishlist support. It is well-suited to grow into a React-powered frontend later, but today it is implemented as a Laravel/Blade app with modern tooling.
 
 Happy building! ✅
+
+---
+
+## Deploying to Render (Free plan)
+
+Render's free tier does not provide SSH or pre-deploy hooks, so the container must perform any first-time setup at runtime. This repository includes a runtime entrypoint script `docker-entrypoint.sh` that:
+
+- installs Composer dependencies if missing
+- ensures `.env` exists (copies from `.env.example`)
+- creates the storage symlink
+- clears caches
+- runs database migrations with a retry loop (waits for DB to become ready)
+
+What to set in Render (Environment):
+
+APP_ENV=production
+APP_DEBUG=false
+APP_KEY=base64:YOUR_GENERATED_KEY
+DB_CONNECTION=mysql
+DB_HOST=<your-db-host>
+DB_PORT=3306
+DB_DATABASE=<your-db-name>
+DB_USERNAME=<your-db-user>
+DB_PASSWORD=<your-db-pass>
+
+Notes:
+
+- The Dockerfile now copies `docker-entrypoint.sh` and sets it as the container `ENTRYPOINT`. The default `CMD` remains `php-fpm` so the entrypoint finishes setup and then starts the server.
+- Migrations are run automatically at container start with retries to handle database cold starts.
+- Because the entrypoint runs `composer install` when `vendor` is missing, no manual pre-deploy commands are required on Render.
+
+If you prefer a different strategy (eg. run migrations from CI or use an external DB migration tool), remove or modify the `docker-entrypoint.sh` accordingly.
